@@ -1,0 +1,44 @@
+В базе данных MS SQL Server есть продукты и категории. 
+Одному продукту может соответствовать много категорий, 
+в одной категории может быть много продуктов. 
+Напишите SQL запрос для выбора всех пар «Имя продукта – Имя категории». 
+Если у продукта нет категорий, то его имя все равно должно выводиться.
+
+CREATE TABLE Product (
+id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+ProductName VARCHAR(30) NOT NULL
+);
+
+INSERT Product(ProductName) 
+VALUES
+('Вода газированая'),
+('Энергетический напиток'),
+('Мясо');
+
+CREATE TABLE Category (
+id INT(6) UNSIGNED AUTO_INCREMENT PRIMARY KEY,
+CategoryName VARCHAR(30) NOT NULL
+);
+
+INSERT Category (CategoryName) 
+VALUES
+('Вода, соки, напитки'),
+('Детские напитки');
+
+CREATE TABLE ProductCategory 
+ProductId INT(6) NOT NULL,
+CategoryId INT(6) NOT NULL,
+PRIMARY KEY (ProductId, CategoryId)
+);
+
+INSERT ProductCategory(ProductId, CategoryId) 
+VALUES
+(1, 1),
+(1, 2),
+(2, 1);
+
+SELECT p.ProductName, c.CategoryName
+FROM Product p
+LEFT JOIN ProductCategory pc ON pc.ProductId = p.Id
+LEFT JOIN Category c ON pc.CategoryId = c.Id
+ORDER BY p.ProductName;
